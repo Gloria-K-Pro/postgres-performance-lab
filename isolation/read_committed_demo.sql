@@ -1,0 +1,19 @@
+-- read_committed_demo.sql
+-- Demonstration steps to show READ COMMITTED behavior
+-- Session 1 (s1):
+-- BEGIN; -- default is READ COMMITTED
+-- SELECT COUNT(*) FROM orders WHERE status = 'pending'; -- observe N
+-- (do not commit yet)
+--
+-- Session 2 (s2):
+-- BEGIN;
+-- UPDATE orders SET status = 'completed' WHERE id = 1; -- change a row
+-- COMMIT;
+--
+-- Session 1 (s1) again:
+-- SELECT COUNT(*) FROM orders WHERE status = 'pending';
+-- In READ COMMITTED, the second SELECT will see the change committed by session 2.
+
+-- For scripted demo using psql non-interactive, you can use:
+-- psql -c "BEGIN; SELECT COUNT(*) FROM orders WHERE status='pending';" -v ON_ERROR_STOP=1
+-- Make the update in another session, commit, then re-run the SELECT in session1.

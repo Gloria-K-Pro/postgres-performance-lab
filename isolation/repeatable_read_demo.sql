@@ -1,0 +1,18 @@
+-- repeatable_read_demo.sql
+-- Demonstration steps to show REPEATABLE READ behavior (PostgreSQL's REPEATABLE READ implements snapshot isolation)
+-- Session 1 (s1):
+-- BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+-- SELECT COUNT(*) FROM orders WHERE status = 'pending'; -- observe N
+-- (do not commit)
+--
+-- Session 2 (s2):
+-- BEGIN;
+-- UPDATE orders SET status = 'completed' WHERE id = 1; -- change a row
+-- COMMIT;
+--
+-- Session 1 (s1) again:
+-- SELECT COUNT(*) FROM orders WHERE status = 'pending';
+-- Under REPEATABLE READ, s1 will NOT see the change made and committed by s2, because it uses a snapshot taken at the beginning of s1's transaction.
+
+-- To end the transaction:
+-- COMMIT;

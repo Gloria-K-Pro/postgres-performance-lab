@@ -1,0 +1,16 @@
+-- connection_test.txt
+-- Example command to connect through PgBouncer and expected result
+
+Command:
+psql -h 127.0.0.1 -p 6432 -U postgres bootcamp
+
+Expected confirmation:
+psql (13.12)
+Type "help" for help.
+
+bootcamp=> \dt
+ List of relations
+ ...
+
+-- If connection succeeds you'll get the psql prompt connected to the `bootcamp` database via PgBouncer.
+-- If PgBouncer is not running, you'll get a connection refused or timeout error.

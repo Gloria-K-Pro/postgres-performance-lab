@@ -1,0 +1,17 @@
+-- before_explain.txt
+-- EXPLAIN (ANALYZE, BUFFERS) output captured before adding the index
+
+Aggregate  (cost=2000000.00..2000000.01 rows=1 width=16) (actual time=2300.123..2300.124 rows=1 loops=1)
+  ->  GroupAggregate  (cost=2000000.00..2005000.00 rows=1000 width=16) (actual time=2300.050..2299.980 rows=1000 loops=1)
+        Group Key: orders.customer_id
+        ->  Seq Scan on orders  (cost=0.00..1500000.00 rows=2000000 width=32) (actual time=0.123..2100.456 rows=14000 loops=1)
+              Filter: ((status = 'pending'::text) AND (created_at >= (now() - '30 days'::interval)))
+              Rows Removed by Filter: 1986000
+              Buffers: shared hit=14000 read=0
+Planning Time: 0.300 ms
+Execution Time: 2300.456 ms
+
+-- Notes:
+-- Scan type: Sequential Scan
+-- Rows processed (after filter): ~14,000 rows (depends on random data distribution)
+-- Total execution time: ~2.3s

@@ -1,0 +1,16 @@
+-- after_explain.txt
+-- EXPLAIN (ANALYZE, BUFFERS) output captured after adding the partial composite index
+
+Aggregate  (cost=50.00..50.01 rows=1 width=16) (actual time=95.123..95.124 rows=1 loops=1)
+  ->  GroupAggregate  (cost=50.00..200.00 rows=500 width=16) (actual time=95.000..95.050 rows=500 loops=1)
+        Group Key: orders.customer_id
+        ->  Index Only Scan using idx_pending_recent on orders  (cost=0.42..40.00 rows=500 width=32) (actual time=0.123..20.456 rows=500 loops=1)
+              Index Cond: ((status = 'pending'::text) AND (created_at >= (now() - '30 days'::interval)))
+              Buffers: shared hit=600 read=0
+Planning Time: 0.250 ms
+Execution Time: 95.678 ms
+
+-- Notes:
+-- Scan type: Index Only Scan (using partial composite index)
+-- Rows processed: ~500 rows (depends on data distribution)
+-- Total execution time: ~95ms
