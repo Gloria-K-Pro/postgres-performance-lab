@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # postgres-performance-lab
 
 Project overview
